@@ -1,0 +1,24 @@
+# Usamos PHP-FPM con extensiones necesarias para WordPress
+FROM php:8.2-fpm
+
+# Instala extensiones de PHP necesarias para WordPress y MariaDB/MySQL
+RUN apt-get update && apt-get install -y \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    curl \
+    git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd mysqli pdo pdo_mysql zip
+
+# Configurar el directorio de trabajo
+WORKDIR /var/www/html
+
+# Copiamos el php.ini personalizado
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+
+# Usuario de trabajo (www-data es el que usa WordPress)
+USER www-data
