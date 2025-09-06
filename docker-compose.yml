@@ -11,7 +11,7 @@ services:
     networks:
       - wordpress-network
 
-  wpphp:  # <--- en minúsculas
+  wpphp:
     build:
       context: ./php
     volumes:
@@ -30,6 +30,7 @@ services:
       MYSQL_PASSWORD: wordpress_password
     volumes:
       - mariadb_data:/var/lib/mysql
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql:ro
     networks:
       - wordpress-network
 
